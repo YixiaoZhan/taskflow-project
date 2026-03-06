@@ -1,4 +1,4 @@
-const tareasGuardadas = [];
+let tareasGuardadas = [];
 let tareaActual;
 
 const boton = document.getElementById("boton");
@@ -12,15 +12,35 @@ const borrarFormulario = () => {
 
 const crearTarea = (tareaActual, tareas) => {
     const div = document.createElement("div");
-    const p = document.createElement("p");
-    const button = document.createElement("button");
+    div.classList.add("tarea");
 
+    const p = document.createElement("p");
     p.textContent = tareaActual + "\u00A0";
+    
+    const button = document.createElement("button");
     button.textContent = "Borrar";
-    div.classList.add(tareaActual);
+    button.classList.add("borrar");
+    button.addEventListener('click', () => {
+    div.remove();
+    });
 
     div.append(p, button);
     tareas.append(div);
+}
+
+const buscarTarea = () => {
+    const valorBuscador = buscador.value;
+    console.log(valorBuscador);
+    document.querySelectorAll(".tarea").forEach(div => {
+    const p = div.querySelector("p");
+    const tarea = p.textContent.toLowerCase();
+
+    if (tarea.includes(valorBuscador)) {
+      div.style.display = "block";
+    } else {
+      div.style.display = "none";
+    }
+  })
 }
 
 boton.addEventListener("click", (e) =>{
@@ -34,9 +54,13 @@ boton.addEventListener("click", (e) =>{
     borrarFormulario();
     return alert("No puede haber tareas repetidas"); 
     }
+
     tareasGuardadas.push(tareaActual);
     crearTarea(tareaActual, tareas);
     borrarFormulario();
 })
+
+buscador.addEventListener("input", (buscarTarea));
+
 
 
