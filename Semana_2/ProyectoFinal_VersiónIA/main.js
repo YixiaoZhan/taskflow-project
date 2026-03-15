@@ -209,15 +209,15 @@ completarTodo.addEventListener("click", () =>{
   actualizarEstadisticas();
 })
 
-//borrar todo completado:
+//borrar todo completado -- Codigo modificado por IA
 const borrarCompletado = () => {
-  const divTareas = document.getElementById("tareas");
-  divTareas.querySelectorAll(".completado").forEach(tarea =>{
-    const valorP = tarea.dataset.valor;
-    tareasGuardadas = tareasGuardadas.filter(t => t.valor !== valorP);
-    tarea.parentElement.remove();
-    actualizarLocal();
-  })
+  const completadas = tareas.querySelectorAll(".tarea.completado");
+  if (!completadas.length) return;
+
+  completadas.forEach(div => div.remove());
+  tareasGuardadas = tareasGuardadas.filter(t => t.categoria !== "completado");
+
+  actualizarLocal();
   mostrarInformacion();
   actualizarEstadisticas();
 }
