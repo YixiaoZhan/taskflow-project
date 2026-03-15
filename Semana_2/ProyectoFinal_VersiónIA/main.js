@@ -18,8 +18,10 @@ const otro = document.getElementById("otro");
 const botonTodo = document.getElementById("botonTodo");
 const completarTodo = document.getElementById("completarTodo");
 const borrarTodo = document.getElementById("borrarTodo");
+const limpiarTodo = document.getElementById("limpiarTodo");
 
 const tareasTotales = document.getElementById("tareasTotales");
+const tareasPendientes = document.getElementById("tareasPendientes");
 const tareasCompletas = document.getElementById("tareasCompletas");
 const tareasSkilling = document.getElementById("tareasSkilling");
 const tareasBossing = document.getElementById("tareasBossing");
@@ -42,11 +44,11 @@ const borrarFormulario = () => {
 //Funcion para obtener el icono segun la categoria
 const getTaskIconSrc = (categoria) => {
   const mapping = {
-    skilling: "/recursos/Stats_icon.png",
-    bossing: "/recursos/Multicombat.png",
-    otro: "/recursos/Dungeon_icon.png",
-    completado: "/recursos/Distraction_map_icon.png",
-    default: "/recursos/Distraction_map_icon.png"
+    skilling: "recursos/Stats_icon.png",
+    bossing: "recursos/Multicombat.png",
+    otro: "recursos/Dungeon_icon.png",
+    completado: "recursos/Distraction_map_icon.png",
+    default: "recursos/Distraction_map_icon.png"
   };
   return mapping[categoria] || mapping.default;
 };
@@ -54,6 +56,8 @@ const getTaskIconSrc = (categoria) => {
 
 //funcion para construir el div de la tarea
 const buildTaskCard = (tarea) => {
+  if (!tarea.createdAt) tarea.createdAt = Date.now();
+
   const div = document.createElement("div");
   div.className = `tarea flex ... rounded-2xl border ... ${tarea.categoria}`;
 
@@ -63,6 +67,14 @@ const buildTaskCard = (tarea) => {
   p.className = "flex-1 ...";
   if (tarea.categoria === "completado") p.classList.add("line-through");
 
+  const createdAtText = document.createElement("small");
+  createdAtText.textContent = `Creada: ${new Date(tarea.createdAt).toLocaleString()}`;
+  createdAtText.className = "text-xs text-gray-400 dark:text-gray-300 ml-2";
+
+  const estadoWrapper = document.createElement("div");
+  estadoWrapper.className = "flex flex-col";
+  estadoWrapper.append(p, createdAtText);
+
   const img = new Image(20, 20);
   img.src = getTaskIconSrc(tarea.categoria);
 
@@ -71,7 +83,7 @@ const buildTaskCard = (tarea) => {
   btnDelete.className = "borrar ...";
   btnDelete.style.margin = "0.125rem";
 
-  div.append(img, p, btnDelete);
+  div.append(img, estadoWrapper, btnDelete);
   if (tarea.categoria !== "completado") {
     const btnEdit = document.createElement("button");
     btnEdit.textContent = "🖉";
@@ -129,6 +141,19 @@ const createTaskElement = (tarea) => {
     });
   }
 
+  p.addEventListener("dblclick", () => {
+    if (tarea.categoria === "completado") return;
+    const nuevoValor = prompt("¿Cómo se llamará la tarea?").trim();
+    if (!nuevoValor) return alert("No puede estar vacío");
+    if (tareasGuardadas.some(t => t.valor.toLowerCase() === nuevoValor.toLowerCase() && t !== tarea))
+      return alert("No puede haber tareas repetidas");
+    tarea.valor = nuevoValor;
+    p.textContent = nuevoValor;
+    p.dataset.valor = nuevoValor;
+    actualizarLocal();
+    actualizarEstadisticas();
+  });
+
   tareas.appendChild(div);
   if (filtroActual && !div.classList.contains(filtroActual)) div.classList.add("hidden");
 };
@@ -174,6 +199,19 @@ const crearTarea = (tarea) => {
       actualizarEstadisticas();
     });
   }
+
+  p.addEventListener("dblclick", () => {
+    if (tarea.categoria === "completado") return;
+    const nuevoValor = prompt("¿Cómo se llamará la tarea?").trim();
+    if (!nuevoValor) return alert("No puede estar vacío");
+    if (tareasGuardadas.some(t => t.valor.toLowerCase() === nuevoValor.toLowerCase() && t !== tarea))
+      return alert("No puede haber tareas repetidas");
+    tarea.valor = nuevoValor;
+    p.textContent = nuevoValor;
+    p.dataset.valor = nuevoValor;
+    actualizarLocal();
+    actualizarEstadisticas();
+  });
 
   tareas.appendChild(div);
   if (filtroActual && !div.classList.contains(filtroActual)) div.classList.add("hidden");
@@ -226,6 +264,22 @@ borrarTodo.addEventListener("click", () =>{
   borrarCompletado();
 })
 
+//boton limpiar todo (nueva funcionalidad)
+const limpiarTodasLasTareas = () => {
+  if (!tareasGuardadas.length) return;
+  const confirmacion = confirm("¿Seguro que deseas borrar todas las tareas? Esta acción no se puede deshacer.");
+  if (!confirmacion) return;
+  tareasGuardadas = [];
+  tareas.innerHTML = "";
+  actualizarLocal();
+  mostrarInformacion();
+  actualizarEstadisticas();
+};
+
+limpiarTodo.addEventListener("click", () => {
+  limpiarTodasLasTareas();
+});
+
 //funcion para buscar tarea
 const buscarTarea = () => {
   const q = normalizarTexto(buscador.value);
@@ -244,6 +298,13 @@ const debounce = (fn, ms = 150) => {
 };
 
 buscador.addEventListener("input", debounce(buscarTarea, 150));
+
+creador.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    boton.click();
+  }
+});
 
 //filtrar por categoria
 let filtroActual = null;
@@ -289,7 +350,7 @@ otro.addEventListener("click", () =>{
 boton.addEventListener("click", (e) =>{
     e.preventDefault();
     
-    const tareaTemporal = {categoria: tipo.value, valor: creador.value};
+    const tareaTemporal = {categoria: tipo.value, valor: creador.value, createdAt: Date.now()};
 
     //comprobar que no sea repetido o vacio
     if (tareaTemporal.valor === "") {
@@ -340,17 +401,19 @@ tema.addEventListener("click", () => {
 
 //estadisticas -- Codigo generado por IA
 const getStats = () => {
-  return tareasGuardadas.reduce(
-    (acc, tarea) => {
-      acc.total += 1;
-      if (tarea.categoria === "completado") acc.completado += 1;
-      if (tarea.categoria === "skilling") acc.skilling += 1;
-      if (tarea.categoria === "bossing") acc.bossing += 1;
-      if (tarea.categoria === "otro") acc.otro += 1;
-      return acc;
+  const acc = tareasGuardadas.reduce(
+    (accumulator, tarea) => {
+      accumulator.total += 1;
+      if (tarea.categoria === "completado") accumulator.completado += 1;
+      if (tarea.categoria === "skilling") accumulator.skilling += 1;
+      if (tarea.categoria === "bossing") accumulator.bossing += 1;
+      if (tarea.categoria === "otro") accumulator.otro += 1;
+      return accumulator;
     },
     { total: 0, completado: 0, skilling: 0, bossing: 0, otro: 0 }
   );
+  acc.pendientes = Math.max(0, acc.total - acc.completado);
+  return acc;
 };
 
 //funcion para actualizar las estadisticas --codigo generado por IA
@@ -358,6 +421,7 @@ const actualizarEstadisticas = () => {
   const s = getStats();
   tareasTotales.textContent = s.total;
   tareasCompletas.textContent = s.completado;
+  tareasPendientes.textContent = s.pendientes;
   tareasSkilling.textContent = s.skilling;
   tareasBossing.textContent = s.bossing;
   otrasTareas.textContent = s.otro;

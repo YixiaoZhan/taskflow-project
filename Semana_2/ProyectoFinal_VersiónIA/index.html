@@ -5,14 +5,14 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>TASKBOARD.RS</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script src="/main.js" defer></script>
-        <link rel="stylesheet" href="/style.css">
+        <script src="main.js" defer></script>
+        <link rel="stylesheet" href="style.css">
         
-        <link rel="stylesheet" href="/output.css">
+        <link rel="stylesheet" href="output.css">
     </head> 
     <body class="min-h-screen flex flex-col">
         <header class="flex justify-start m-0 p-1 items-center shadow-md bg-[#C0A786] dark:bg-[#1B1612]">
-            <img src="/recursos/Gnomechild_(Steam_Emoticon).png" alt="gnomechild_steam" class="inline-block">
+            <img src="recursos/Gnomechild_(Steam_Emoticon).png" alt="gnomechild_steam" class="inline-block">
             <h1 class="text-4xl p-0 inline-block">TASKBOARD.RS</h1>
             <button id="tema" class="ml-auto mr-2.5 cursor-pointer transition-transform duration-200 hover:scale-110 active:text-[#a8897a] dark:active:text-[#b5a992]">
               <svg class="w-7 h-7" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun-moon-icon lucide-sun-moon"><path d="M12 2v2"/><path d="M14.837 16.385a6 6 0 1 1-7.223-7.222c.624-.147.97.66.715 1.248a4 4 0 0 0 5.26 5.259c.589-.255 1.396.09 1.248.715"/><path d="M16 12a4 4 0 0 0-4-4"/><path d="m19 5-1.256 1.256"/><path d="M20 12h2"/></svg>
@@ -41,13 +41,13 @@
                     </div> 
                 </div>  
             </section>
-            <section class="flex-1 flex flex-col lg:flex-row lg:justify-center text-[#F4EAEA] bg-[#3E3529] dark:bg-[#221C14] border-[10px] border-solid [border-image-source:url('/recursos/Inventory_tab.png')] [border-image-slice:10] [border-image-repeat:stretch]">
+            <section class="flex-1 flex flex-col lg:flex-row lg:justify-center text-[#F4EAEA] bg-[#3E3529] dark:bg-[#221C14] border-[10px] border-solid [border-image-source:url('recursos/Inventory_tab.png')] [border-image-slice:10] [border-image-repeat:stretch]">
                 <div class="flex flex-col lg:w-1/2">
                     <div class="p-2.5 flex justify-center">
                         <h2 class="p-1 text-3xl font-['Times_New_Roman'] border-b border-[#F4EAEA]">Tareas actuales:</h2>
                     </div>
                     <div id="chathead" class="p-2.5 flex justify-center ">
-                        <img src="/recursos/Gnome_child_chathead.png" alt="gnomechild_chatbox">
+                        <img src="recursos/Gnome_child_chathead.png" alt="gnomechild_chatbox">
                         </div>
                     <div id="filtros" class="flex gap-2 justify-center">
                         <button id="completado" class="p-2 cursor-pointer border border-[rgb(128,128,128)] rounded-full transition-all duration-200 hover:scale-110 active:text-[#a8897a] dark:active:text-[#b5a992]">Completadas</button>
@@ -60,6 +60,7 @@
                     <div id="botonTodo" class="p-1 gap-2 flex justify-center">
                         <button id="completarTodo" class="p-2 cursor-pointer border border-[rgb(128,128,128)] rounded-full transition-all duration-200 hover:scale-110 hover:bg-green-500 hover:border-green-500 active:text-[#a8897a] dark:active:text-[#b5a992]">Completar todo</button>
                         <button id="borrarTodo" class="p-2 cursor-pointer border border-[rgb(128,128,128)] rounded-full transition-all duration-200 hover:scale-110 hover:bg-red-500 hover:border--500 active:text-[#a8897a] dark:active:text-[#b5a992]">Borrar completados</button>
+                        <button id="limpiarTodo" class="p-2 cursor-pointer border border-[rgb(128,128,128)] rounded-full transition-all duration-200 hover:scale-110 hover:bg-red-500 hover:border-red-500 active:text-[#a8897a] dark:active:text-[#b5a992]">Limpiar todo</button>
                     </div>
                 </div>
                 <div id="estadisticas" class="p-2.5 lg:w-1/2 flex flex-col justify-center sticky top-0 self-start">
@@ -73,6 +74,7 @@
                         <div class="flex flex-col justify-center">
                         <p class="inline-block">Tareas Totales: <em id="tareasTotales">0</em></p>
                         <p class="inline-block">Completadas: <em id="tareasCompletas">0</em></p>
+                        <p class="inline-block">Pendientes: <em id="tareasPendientes">0</em></p>
                         <p class="inline-block">Skilling: <em id="tareasSkilling">0</em></p>
                         <p class="inline-block">Bossing: <em id="tareasBossing">0</em></p>
                         <p class="inline-block">Otros: <em id="otrasTareas">0</em></p>
