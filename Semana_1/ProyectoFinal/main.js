@@ -1,5 +1,6 @@
 let tareasGuardadas = [];
 const formularioTarea = document.getElementById("formularioTarea");
+const seccionBuscador = document.getElementById("seccionBuscador");
 const buscador = document.getElementById("buscador");
 const creador = document.getElementById("creador");
 const tipo = document.getElementById("tipo");
@@ -38,13 +39,13 @@ const borrarFormulario = () => {
 //funcion para crear tareas
 const crearTarea = (tarea) => {
   const div = document.createElement("div");
-  div.className = "tarea flex flex-row items-center max-w-full p-1 pl-2 draggable rounded-2xl border border-[rgb(128,128,128)] m-2.5 mx-0 transition-transform duration-200 lg:hover:scale-102";
+  div.className = "tarea p-1 flex flex-row items-center max-w-full border";
   div.classList.add(tarea.categoria);
 
   const p = document.createElement("p");
   p.textContent = tarea.valor;
   p.dataset.valor = tarea.valor;
-  p.className = "flex-1 inline-block p-1.5 font-['Times_New_Roman'] whitespace-nowrap overflow-x-auto";
+  p.className = "flex-1 p-1.5 whitespace-nowrap overflow-x-auto";
   if (tarea.categoria === "completado"){
     p.classList.add("line-through");
   }
@@ -62,7 +63,7 @@ const crearTarea = (tarea) => {
 
   const borrar = document.createElement("button");
   borrar.textContent = "✕";
-  borrar.className = "borrar border border-[rgb(128,128,128)] rounded-2xl w-7 h-7 transition-transform duration-200 hover:bg-red-500 hover:border-red-500";
+  borrar.className = "borrar border botonPeq hoverRojo";
   borrar.style.margin = "0.125rem";  
 
   //eventListener para boton de borrar
@@ -79,8 +80,8 @@ const crearTarea = (tarea) => {
   if(tarea.categoria !== "completado"){
 
     const editar = document.createElement("button");
-    editar.textContent = "🖉";
-    editar.className = "editar border border-[rgb(128,128,128)] rounded-2xl w-7 h-7 transition-transform duration-200";
+    editar.textContent = "✎";
+    editar.className = "editar border botonPeq hoverNeutro";
     editar.style.margin = "0.125rem";
 
     //eventListener para boton de editar
@@ -103,7 +104,7 @@ const crearTarea = (tarea) => {
 
     const completar = document.createElement("button");
     completar.textContent = "✓";
-    completar.className = "completar border border-[rgb(128,128,128)] rounded-2xl w-7 h-7 transition-transform duration-200 hover:bg-green-500 hover:border-green-500";
+    completar.className = "completar border botonPeq hoverVerde";
     completar.style.margin = "0.125rem";
 
  
@@ -267,11 +268,13 @@ formularioTarea.addEventListener("submit", (e) =>{
 //Funcion para mostrar informacion, si no hay tarea muestra la imagen
 const mostrarInformacion = () => {
   if (!tareasGuardadas.length){
+    seccionBuscador.classList.add("hidden");
     estadisticas.classList.add("hidden");
     filtros.classList.add("hidden");
     botonTodo.classList.add("hidden");
     chatHead.classList.remove("hidden");
   }else{
+    seccionBuscador.classList.remove("hidden");
     estadisticas.classList.remove("hidden");
     filtros.classList.remove("hidden");
     botonTodo.classList.remove("hidden");

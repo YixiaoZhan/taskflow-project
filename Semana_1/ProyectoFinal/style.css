@@ -54,16 +54,22 @@ button{
   cursor: pointer;
 }
 
+h2{
+  font-size: var(--textoMediano);
+  text-align: center;
+  display: inline-block;
+}
+
 a{
   text-decoration: none;
+}
 
-  :any-link{
-    color: #896E52;
-  }
+a:any-link{
+  color: #896E52;
+}
 
-  :hover{
-    text-decoration: underline;
-  }
+a:hover{
+  text-decoration: underline;
 }
 
 footer{
@@ -78,37 +84,57 @@ footer{
 }
 
 .elegido{
-  scale: 1.10;
   background-color: var(--colorFondoSecundarioClaro);
+}
+
+.border{
   border-color: var(--bordeClaro);
 }
 
+.dark .border {
+  border-color: var(--bordeOscuro);
+}
+
+.tareas .border{
+  border-color: var(--bordeOscuro);
+}
+
 .borderOSRS{
-  color:var(--colorTextoOscuro);
+  color :var(--colorTextoOscuro);
   background-color: #3E3529;
   border-width: 10px;
   border-style: solid;
   border-image: url(/recursos/Inventory_tab.png);
   border-image-slice: 10;
   border-image-repeat: stretch;
-  :hover{
-    
-  }
 }
 
-.tema{
-  
+.dark .borderOSRS{
+  background-color: #2f281f;
 }
 
-.transition{
-  transition-property: all;
-  transition-duration: 200ms;
+.botonPeq{
+  width: 1.75rem;
+  height: 1.75rem;
 }
+
+.hoverVerde:hover {
+  background-color: #4CAF50;
+  border-color: #4CAF50;
+}
+
+.hoverRojo:hover {
+  background-color: #f44336;
+  border-color: #f44336;
+}
+
+.hoverNeutro:hover {
+  background-color: #C0A786;
+  border-color: #C0A786;
+}
+
+
 
 @media  (min-width: 768px) {
     
-  .crearBuscar{
-    flex-direction: row;
-    justify-content: center;
-  }
 }
